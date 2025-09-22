@@ -1,98 +1,151 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React from 'react';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const products = [
+  {
+    id: 1,
+    name: 'Apple iPhone 14',
+    price: '$999',
+    shipping: 'Free Shipping'
+  },
+  {
+    id: 2,
+    name: 'Samsung Galaxy S22',
+    price: '$799',
+    shipping: 'Standard Shipping'
+  },
+  {
+    id: 3,
+    name: 'Google Pixel 7',
+    price: '$599',
+    shipping: 'Free Shipping'
+  },
+  {
+    id: 4,
+    name: 'Sony WH-1000XM5 Headphones',
+    price: '$349',
+    shipping: 'Express Shipping'
+  },
+  {
+    id: 5,
+    name: 'Dell XPS 13 Laptop',
+    price: '$1,199',
+    shipping: 'Free Shipping'
+  },
+  {
+    id: 6,
+    name: 'Apple MacBook Pro',
+    price: '$1,299',
+    shipping: 'Express Shipping'
+  },
+  {
+    id: 7,
+    name: 'Samsung Galaxy Tab S8',
+    price: '$699',
+    shipping: 'Standard Shipping'
+  }
+];
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const handleAddToCart = (productName: string) => {
+    console.log(`Added ${productName} to cart`);
+  };
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>index</Text>
+      </View>
+      
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        {products.map((product) => (
+          <View key={product.id} style={styles.productCard}>
+            <View style={styles.productInfo}>
+              <Text style={styles.productName}>{product.name}</Text>
+              <Text style={styles.productPrice}>{product.price}</Text>
+              <Text style={styles.shippingInfo}>{product.shipping}</Text>
+            </View>
+            <TouchableOpacity 
+              style={styles.addToCartButton}
+              onPress={() => handleAddToCart(product.name)}
+            >
+              <Text style={styles.buttonText}>ADD TO CART</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: '#5DADE2',
+  },
+  header: {
+    backgroundColor: '#FFFFFF',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333333',
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#E8E8E8',
+  },
+  productCard: {
+    backgroundColor: '#FFFFFF',
+    marginHorizontal: 15,
+    marginVertical: 8,
+    padding: 15,
+    borderRadius: 8,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  productInfo: {
+    flex: 1,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  productName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 4,
+  },
+  productPrice: {
+    fontSize: 16,
+    color: '#2196F3',
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  shippingInfo: {
+    fontSize: 12,
+    color: '#666666',
+  },
+  addToCartButton: {
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 4,
+    marginLeft: 10,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
 });
